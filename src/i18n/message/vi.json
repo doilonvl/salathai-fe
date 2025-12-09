@@ -1,0 +1,11 @@
+{
+  "home": {
+    "welcome": "Chào mừng bạn đến với ứng dụng của chúng tôi!"
+  },
+  "notFound": {
+    "title": "Không tìm thấy trang",
+    "description": "Trang bạn đang tìm không tồn tại hoặc đã được di chuyển.",
+    "ctaHome": "Về trang chủ",
+    "hint": "Kiểm tra lại đường dẫn hoặc quay về trang chủ."
+  }
+}

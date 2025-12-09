@@ -1,0 +1,11 @@
+{
+  "home": {
+    "welcome": "Welcome to our application!"
+  },
+  "notFound": {
+    "title": "Page Not Found",
+    "description": "The path you accessed may have been deleted or does not exist.",
+    "ctaHome": "Go to Home",
+    "hint": "Check the URL again or try searching for other content."
+  }
+}
