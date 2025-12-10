@@ -120,3 +120,130 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Landing reveal scoped styles */
+.landing-reveal {
+  font-family: var(
+    --font-landing-sans,
+    "Plus Jakarta Sans",
+    system-ui,
+    sans-serif
+  );
+}
+
+.landing-reveal p,
+.landing-reveal a {
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.landing-reveal img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.landing-reveal .lr-nav-item,
+.landing-reveal .lr-loader {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+}
+
+.landing-reveal .lr-nav-item {
+  width: max-content;
+  height: 20px;
+  margin-bottom: 0.125em;
+}
+
+.landing-reveal .lr-loader p,
+.landing-reveal .lr-nav-item p {
+  position: relative;
+}
+
+.font-landing-display {
+  font-family: var(
+    --font-landing-display,
+    "Playfair Display",
+    "Times New Roman",
+    serif
+  );
+}
+
+.landing-reveal .lr-item {
+  position: absolute;
+  width: 175px;
+  height: 250px;
+  background: #b0b0b0;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* Override global image rules for overlay */
+.landing-reveal .lr-overlay-img {
+  width: auto !important;
+  height: auto !important;
+  max-height: 90vh;
+  max-width: 90vw;
+  object-fit: contain !important;
+}
+
+/* Navigation buttons near overlay */
+.lr-nav-btn {
+  transition: box-shadow 0.2s ease;
+}
+
+@media (max-width: 900px) {
+  .landing-reveal nav {
+    gap: 10px;
+    padding: 12px;
+  }
+  .landing-reveal .lr-nav-item p {
+    font-size: 11px;
+  }
+  .landing-reveal .lr-loader {
+    bottom: 10%;
+  }
+  .landing-reveal .lr-loader p {
+    font-size: 12px;
+  }
+  .landing-reveal .lr-overlay-img {
+    max-width: 88vw;
+  }
+  .lr-nav-btn {
+    left: 2%;
+    right: 2%;
+  }
+  .landing-reveal button {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 640px) {
+  .landing-reveal nav {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .landing-reveal .lr-nav-items {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .landing-reveal .lr-nav-item {
+    margin-bottom: 0;
+  }
+  .landing-reveal .lr-nav-item p {
+    font-size: 10px;
+  }
+  .landing-reveal .lr-loader {
+    bottom: 8%;
+  }
+  .landing-reveal .lr-overlay-img {
+    max-width: 96vw;
+    max-height: 80vh;
+  }
+  .landing-reveal .lr-overlay-img,
+  .landing-reveal .lr-overlay-img img {
+    border-radius: 10px;
+  }
+}
