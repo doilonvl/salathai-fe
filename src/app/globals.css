@@ -159,6 +159,23 @@
   position: relative;
 }
 
+.landing-reveal .lr-nav-item p {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.lr-loader-number {
+  font-size: 28px;
+  font-weight: 700;
+  color: #2f3135;
+}
+
+.lr-center-logo {
+  width: 94px !important;
+  height: 94px !important;
+  object-fit: contain !important;
+}
+
 .font-landing-display {
   font-family: var(
     --font-landing-display,
@@ -246,4 +263,19 @@
   .landing-reveal .lr-overlay-img img {
     border-radius: 10px;
   }
+}
+
+/* Marquee scroller scoped styles */
+.wjy-shell {
+  font-family: "PP Neue Montreal", sans-serif;
+}
+
+.wjy-marquee-images,
+.wjy-horizontal-wrapper,
+.wjy-fixed-clone {
+  will-change: transform;
+}
+
+.wjy-fixed-clone {
+  pointer-events: none;
 }

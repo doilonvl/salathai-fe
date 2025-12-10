@@ -1,5 +1,5 @@
 // LandingReveal.tsx
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { Flip } from "gsap/Flip";
 import { CustomEase } from "gsap/CustomEase";
@@ -29,8 +29,7 @@ export function LandingReveal() {
   const selectedImageRef = useRef<string | null>(null);
   const currentIndexRef = useRef<number | null>(null);
   const isReadyRef = useRef(false);
-  const progressRef = useRef<HTMLDivElement>(null);
-  const progressWrapRef = useRef<HTMLDivElement>(null);
+  const [showCenterLogo, setShowCenterLogo] = useState(false);
 
   useEffect(() => {
     gsap.registerPlugin(CustomEase, Flip);
@@ -124,7 +123,6 @@ export function LandingReveal() {
       const maxDuration = 2000;
       const endValue = 100;
       const startTime = Date.now();
-      const progress = progressRef.current;
 
       const updateCounter = () => {
         const elapsedTime = Date.now() - startTime;
@@ -134,23 +132,9 @@ export function LandingReveal() {
             endValue
           );
           counterElement.textContent = String(currentValue);
-          if (progress) {
-            gsap.to(progress, {
-              width: `${currentValue}%`,
-              duration: 0.25,
-              ease: "power2.out",
-            });
-          }
           setTimeout(updateCounter, updateInterval);
         } else {
           counterElement.textContent = String(endValue);
-          if (progress) {
-            gsap.to(progress, {
-              width: "100%",
-              duration: 0.3,
-              ease: "power2.out",
-            });
-          }
           setTimeout(() => {
             gsap.to(counterElement, {
               y: -20,
@@ -283,6 +267,7 @@ export function LandingReveal() {
         simple: true,
         onComplete: () => {
           isReadyRef.current = true;
+          setShowCenterLogo(true);
           attachInteractions(true);
         },
       });
@@ -314,66 +299,50 @@ export function LandingReveal() {
   return (
     <div
       ref={containerRef}
-      className={`${plusJakarta.variable} ${playfair.variable} landing-reveal relative h-screen w-full overflow-hidden bg-[radial-gradient(circle_at_50%_25%,#f3f1eb_0%,#d9d4cc_45%,#c7c2b9_100%)] text-black`}
+      className={`${plusJakarta.variable} ${playfair.variable} landing-reveal relative h-screen w-full overflow-hidden bg-[radial-gradient(circle_at_50%_20%,#fff6e9_0%,#ffe9d2_35%,#f7d8c3_60%,#f0c8af_100%)] text-black`}
     >
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.35)_0%,rgba(255,255,255,0)_45%)]" />
-      <nav className="fixed top-0 flex w-full gap-16 p-6">
-        <div className="flex flex-1 gap-4">
-          <div className="lr-nav-items flex-1">
-            <div className="lr-nav-item">
-              <p className="translate-y-5">Codegrid</p>
-            </div>
-          </div>
-          <div className="lr-nav-items flex-1">
-            <div className="lr-nav-item">
-              <p className="translate-y-5">Youtube Channel</p>
-            </div>
+      <nav className="fixed top-0 left-0 right-0 flex items-start justify-between px-8 pt-4">
+        <div className="flex items-center gap-3">
+          <div className="lr-nav-item">
+            <p className="translate-y-5">Home</p>
           </div>
         </div>
-        <div className="flex flex-[2] gap-4">
-          <div className="lr-nav-items flex-1">
-            <div className="lr-nav-item">
-              <p className="translate-y-5">Work</p>
-            </div>
-            <div className="lr-nav-item">
-              <p className="translate-y-5">Studio</p>
-            </div>
-            <div className="lr-nav-item">
-              <p className="translate-y-5">Contact</p>
-            </div>
+        <div className="flex flex-wrap items-start justify-center gap-10">
+          <div className="lr-nav-item">
+            <p className="translate-y-5">Menu</p>
           </div>
-          <div className="lr-nav-items flex-1">
-            <div className="lr-nav-item">
-              <p className="translate-y-5">Twitter</p>
-            </div>
-            <div className="lr-nav-item">
-              <p className="translate-y-5">Instagram</p>
-            </div>
+          <div className="lr-nav-item">
+            <p className="translate-y-5">About</p>
+          </div>
+          <div className="lr-nav-item">
+            <p className="translate-y-5">Locations</p>
+          </div>
+          <div className="lr-nav-item">
+            <p className="translate-y-5">Gallery</p>
+          </div>
+          <div className="lr-nav-item">
+            <p className="translate-y-5">Reservations</p>
+          </div>
+          <div className="lr-nav-item">
+            <p className="translate-y-5">Delivery</p>
           </div>
         </div>
       </nav>
-
-      <div className="pointer-events-none absolute top-16 left-1/2 -translate-x-1/2 text-center space-y-1">
-        <p className="text-xs uppercase tracking-[0.2em] text-neutral-500">
-          Salathai Menu
-        </p>
-        <p className="font-landing-display text-lg text-neutral-700">
-          Khám phá hương vị Thái ngay tại đây
-        </p>
-      </div>
-
-      <div className="absolute left-0 right-0 top-[72px] mx-auto h-[3px] max-w-[320px] overflow-hidden rounded-full bg-white/50 shadow-sm">
-        <div
-          ref={progressRef}
-          className="h-full w-[0%] bg-gradient-to-r from-[#ff8905] via-[#05acfb] to-[#8fc542]"
-        />
-      </div>
-
       <div className="lr-loader absolute left-1/2 bottom-[15%] h-5 w-10 -translate-x-1/2 -translate-y-1/2 text-center">
-        <p className="block translate-y-5">0</p>
+        <p className="lr-loader-number block translate-y-5">0</p>
       </div>
 
       <div ref={galleryRef} className="lr-gallery absolute inset-0"></div>
+
+      {showCenterLogo && (
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+          <img
+            src="/Logo/Logo1.jpg"
+            alt="Salathai logo"
+            className="lr-center-logo h-12 w-12 rounded-full object-contain opacity-85 drop-shadow-lg"
+          />
+        </div>
+      )}
 
       <div
         ref={overlayRef}

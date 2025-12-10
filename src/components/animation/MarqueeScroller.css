@@ -98,7 +98,7 @@
 
 .wjy-horizontal-wrapper {
   position: relative;
-  width: calc(var(--wjy-slide-count, 3) * 100%);
+  width: 300%;
   height: 100svh;
   display: flex;
   will-change: transform;

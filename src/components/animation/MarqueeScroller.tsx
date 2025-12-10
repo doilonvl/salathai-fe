@@ -51,9 +51,6 @@ export function MarqueeScroller() {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const pinnedCloneRef = useRef<HTMLImageElement | null>(null);
   const flipRef = useRef<gsap.core.Timeline | null>(null);
-  const totalPanels = slides.length + 1; // spacer + slides
-  const maxTranslate = ((totalPanels - 1) / totalPanels) * 100; // percent of wrapper width
-  const maxImageShift = (totalPanels - 1) * 100; // percent of viewport per panel
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger, Flip);
@@ -204,8 +201,9 @@ export function MarqueeScroller() {
           } else if (progress <= 0.95) {
             flipRef.current?.progress(1);
             const horizontalProgress = (progress - 0.2) / 0.75;
-            const wrapperTranslateX = -maxTranslate * horizontalProgress;
-            const imageTranslateX = -maxImageShift * horizontalProgress;
+            const wrapperTranslateX = -66.67 * horizontalProgress;
+            const slideMovement = (66.67 / 100) * 3 * horizontalProgress;
+            const imageTranslateX = -slideMovement * 100;
 
             gsap.set(".wjy-horizontal-wrapper", {
               x: `${wrapperTranslateX}%`,
@@ -216,8 +214,8 @@ export function MarqueeScroller() {
           } else {
             flipRef.current?.progress(1);
             if (pinnedCloneRef.current)
-              gsap.set(pinnedCloneRef.current, { x: `-${maxImageShift}%` });
-            gsap.set(".wjy-horizontal-wrapper", { x: `-${maxTranslate}%` });
+              gsap.set(pinnedCloneRef.current, { x: "-200%" });
+            gsap.set(".wjy-horizontal-wrapper", { x: "-66.67%" });
           }
         },
       });
@@ -264,12 +262,7 @@ export function MarqueeScroller() {
       </section>
 
       <section className="wjy-horizontal">
-        <div
-          className="wjy-horizontal-wrapper"
-          style={{
-            ["--wjy-slide-count" as string]: totalPanels,
-          }}
-        >
+        <div className="wjy-horizontal-wrapper">
           <div className="wjy-horizontal-slide wjy-horizontal-spacer" />
           {slides.map((slide, idx) => (
             <div key={slide.image} className="wjy-horizontal-slide">
