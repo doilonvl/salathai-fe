@@ -1,6 +1,16 @@
 {
   "home": {
-    "welcome": "Welcome to our application!"
+    "welcome": "Welcome to our application!",
+    "scrollStroke": {
+      "card1Title": "Pre-order Thai dishes, pick up right on time",
+      "card1Body": "Guests tap in early on Sala Thai, we batch the wok queue and time the pickup so pad thai and green curry stay hot the minute you step in—no waiting, just scan and go.",
+      "card2Title": "Rush hours stay smooth with Sala Thai",
+      "card2Body": "During the evening rush, Sala Thai keeps online and walk-in orders in one clear lane; the kitchen fires in sequence, and guests know exactly when their order reaches the counter.",
+      "img1Alt": "Sala Thai counter with a guest pre-ordering Thai food",
+      "img2Alt": "Dashboard grouping Sala Thai pickup orders",
+      "img3Alt": "Kitchen workflow following the Sala Thai pickup queue",
+      "img4Alt": "Customer receiving a Thai dish at the Sala Thai pickup counter"
+    }
   },
   "notFound": {
     "title": "Page Not Found",

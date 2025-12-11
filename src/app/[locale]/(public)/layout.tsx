@@ -2,6 +2,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/request";
 import { Toaster } from "@/components/ui/sonner";
+import { FooterExplosion } from "@/components/shared/footer";
 
 export function generateStaticParams() {
   return [{ locale: "vi" }, { locale: "en" }];
@@ -25,6 +26,7 @@ export default async function LocaleLayout({
   return (
     <NextIntlClientProvider locale={resolvedLocale} messages={messages}>
       {children}
+      <FooterExplosion />
       <Toaster />
     </NextIntlClientProvider>
   );

@@ -279,3 +279,31 @@
 .wjy-fixed-clone {
   pointer-events: none;
 }
+
+/* Footer */
+.cg-footer-title {
+  font-family: "FK Screamer", sans-serif;
+}
+
+.cg-footer-copy {
+  font-family: "Akkurat Mono", monospace;
+}
+
+.cg-explosion-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 200%;
+  pointer-events: none;
+}
+
+.cg-explosion-particle {
+  position: absolute;
+  bottom: -200px;
+  left: 50%;
+  height: auto;
+  transform: translateX(-50%);
+  will-change: transform;
+  object-fit: cover;
+}

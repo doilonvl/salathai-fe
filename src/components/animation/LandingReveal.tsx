@@ -4,6 +4,7 @@ import { gsap } from "gsap";
 import { Flip } from "gsap/Flip";
 import { CustomEase } from "gsap/CustomEase";
 import { Plus_Jakarta_Sans, Playfair_Display } from "next/font/google";
+import { ReservationForm } from "@/components/shared/reservation-form";
 
 const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -30,6 +31,7 @@ export function LandingReveal() {
   const currentIndexRef = useRef<number | null>(null);
   const isReadyRef = useRef(false);
   const [showCenterLogo, setShowCenterLogo] = useState(false);
+  const [showReservationModal, setShowReservationModal] = useState(false);
 
   useEffect(() => {
     gsap.registerPlugin(CustomEase, Flip);
@@ -299,32 +301,31 @@ export function LandingReveal() {
   return (
     <div
       ref={containerRef}
+      id="top"
       className={`${plusJakarta.variable} ${playfair.variable} landing-reveal relative h-screen w-full overflow-hidden bg-[radial-gradient(circle_at_50%_20%,#fff6e9_0%,#ffe9d2_35%,#f7d8c3_60%,#f0c8af_100%)] text-black`}
     >
-      <nav className="fixed top-0 left-0 right-0 flex items-start justify-between px-8 pt-4">
+      <nav className="fixed top-0 left-0 right-0 z-50 flex items-start justify-between px-8 pt-4">
         <div className="flex items-center gap-3">
           <div className="lr-nav-item">
-            <p className="translate-y-5">Home</p>
+            <a href="#top">
+              <p className="translate-y-5">Home</p>
+            </a>
           </div>
         </div>
         <div className="flex flex-wrap items-start justify-center gap-10">
           <div className="lr-nav-item">
-            <p className="translate-y-5">Menu</p>
+            <button
+              type="button"
+              onClick={() => setShowReservationModal(true)}
+              className="focus:outline-none"
+            >
+              <p className="translate-y-5">Reservations</p>
+            </button>
           </div>
           <div className="lr-nav-item">
-            <p className="translate-y-5">About</p>
-          </div>
-          <div className="lr-nav-item">
-            <p className="translate-y-5">Locations</p>
-          </div>
-          <div className="lr-nav-item">
-            <p className="translate-y-5">Gallery</p>
-          </div>
-          <div className="lr-nav-item">
-            <p className="translate-y-5">Reservations</p>
-          </div>
-          <div className="lr-nav-item">
-            <p className="translate-y-5">Delivery</p>
+            <a href="#contact-footer">
+              <p className="translate-y-5">Contact Us</p>
+            </a>
           </div>
         </div>
       </nav>
@@ -422,6 +423,32 @@ export function LandingReveal() {
           ▶
         </button>
       </div>
+
+      {showReservationModal && (
+        <div
+          className="fixed inset-0 z-[1200] flex items-center justify-center bg-black/60 backdrop-blur-sm px-4"
+          onClick={() => setShowReservationModal(false)}
+        >
+          <div
+            className="relative w-full max-w-4xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              onClick={() => setShowReservationModal(false)}
+              className="absolute right-3 top-3 z-[1201] inline-flex h-10 w-10 items-center justify-center rounded-full bg-neutral-900/80 text-white shadow-lg transition hover:bg-neutral-800 focus:outline-none"
+            >
+              X
+            </button>
+            <ReservationForm
+              variant="modal"
+              onSubmit={() => setShowReservationModal(false)}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
+
+

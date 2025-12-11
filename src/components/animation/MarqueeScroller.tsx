@@ -38,12 +38,24 @@ const marqueeImages = [
 
 const slides = [
   {
-    text: `Hương vị đường phố Bangkok biến tấu theo phong cách Salathai: Pad Thai caramen, Tom Yum cay nhẹ và gạo thơm được phục vụ ngay khi bếp mở.`,
+    tag: "Warm up",
+    text: `Mo man hanh trinh: gia vi Thai rang nong, rau thom va trai cay so che truoc gio mo bep.`,
     image: "/Marquee/slide-1.jpg",
   },
   {
-    text: `Bữa tối kéo dài với curry xanh, cá hồi nướng lá chuối và cocktail pandan tạo nên nhịp điệu ấm áp cho những cuộc gặp gỡ tại Salathai.`,
+    tag: "Signature",
+    text: `Noi bat giua bua toi: Pad Thai caramen, Tom Yum chua cay vua phai va ga nuong la chanh them huong khoi.`,
     image: "/Marquee/slide-2.jpg",
+  },
+  {
+    tag: "Refresh",
+    text: `Khoang nghi nhe: salad xoai xanh, goi cuon tom Thai va mocktail pandan giam cay, lam nguoi.`,
+    image: "/Marquee/slide-7.jpg",
+  },
+  {
+    tag: "Dessert",
+    text: `Ket thuc am ap: xoi xoai dua, kem dua non va Thai tea panna cotta de lai vi ngot diu dang.`,
+    image: "/Marquee/slide-4.jpg",
   },
 ];
 
@@ -51,11 +63,31 @@ export function MarqueeScroller() {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const pinnedCloneRef = useRef<HTMLImageElement | null>(null);
   const flipRef = useRef<gsap.core.Timeline | null>(null);
+  const progressRef = useRef<HTMLDivElement | null>(null);
+  const totalPanels = slides.length + 1; // spacer + slides
+  const maxTranslate = ((totalPanels - 1) / totalPanels) * 100; // wrapper shift %
+  const maxImageShift = (totalPanels - 1) * 100; // pinned image shift %
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger, Flip);
+    const shell = containerRef.current;
+    if (!shell) return;
 
     const lenis = new Lenis();
+    ScrollTrigger.scrollerProxy(document.body, {
+      scrollTop(value) {
+        return arguments.length ? lenis.scrollTo(value ?? 0) : lenis.scroll;
+      },
+      getBoundingClientRect() {
+        return {
+          top: 0,
+          left: 0,
+          width: window.innerWidth,
+          height: window.innerHeight,
+        };
+      },
+      pinType: document.body.style.transform ? "transform" : "fixed",
+    });
     const onTick = (time: number) => lenis.raf(time * 1000);
 
     lenis.on("scroll", ScrollTrigger.update);
@@ -64,9 +96,7 @@ export function MarqueeScroller() {
 
     const ctx = gsap.context(() => {
       const getColor = (name: string) =>
-        getComputedStyle(containerRef.current as HTMLElement)
-          .getPropertyValue(name)
-          .trim();
+        getComputedStyle(shell).getPropertyValue(name).trim();
 
       const lightColor = getColor("--wjy-light") || "#edf1e8";
       const darkColor = getColor("--wjy-dark") || "#101010";
@@ -174,7 +204,7 @@ export function MarqueeScroller() {
         onLeaveBack: () => {
           flipRef.current?.kill();
           flipRef.current = null;
-          gsap.set(".wjy-shell", { backgroundColor: lightColor });
+          gsap.set(shell, { backgroundColor: lightColor });
           gsap.set(".wjy-horizontal-wrapper", { x: "0%" });
         },
       });
@@ -186,13 +216,18 @@ export function MarqueeScroller() {
         end: () => `+=${window.innerHeight * 5.5}`,
         onUpdate: (self) => {
           const progress = self.progress;
+          const horizontalProgressRaw = (progress - 0.2) / 0.75;
+          const horizontalProgress = Math.min(
+            Math.max(horizontalProgressRaw, 0),
+            1
+          );
 
           // Background fade
           if (progress <= 0.05) {
             const newBg = mix(lightColor, darkColor, progress / 0.05);
-            gsap.set(".wjy-shell", { backgroundColor: newBg });
+            gsap.set(shell, { backgroundColor: newBg });
           } else {
-            gsap.set(".wjy-shell", { backgroundColor: darkColor });
+            gsap.set(shell, { backgroundColor: darkColor });
           }
 
           // Flip play
@@ -200,10 +235,8 @@ export function MarqueeScroller() {
             flipRef.current?.progress(progress / 0.2);
           } else if (progress <= 0.95) {
             flipRef.current?.progress(1);
-            const horizontalProgress = (progress - 0.2) / 0.75;
-            const wrapperTranslateX = -66.67 * horizontalProgress;
-            const slideMovement = (66.67 / 100) * 3 * horizontalProgress;
-            const imageTranslateX = -slideMovement * 100;
+            const wrapperTranslateX = -maxTranslate * horizontalProgress;
+            const imageTranslateX = -maxImageShift * horizontalProgress;
 
             gsap.set(".wjy-horizontal-wrapper", {
               x: `${wrapperTranslateX}%`,
@@ -214,8 +247,14 @@ export function MarqueeScroller() {
           } else {
             flipRef.current?.progress(1);
             if (pinnedCloneRef.current)
-              gsap.set(pinnedCloneRef.current, { x: "-200%" });
-            gsap.set(".wjy-horizontal-wrapper", { x: "-66.67%" });
+              gsap.set(pinnedCloneRef.current, { x: `-${maxImageShift}%` });
+            gsap.set(".wjy-horizontal-wrapper", { x: `-${maxTranslate}%` });
+          }
+
+          if (progressRef.current) {
+            gsap.set(progressRef.current, {
+              width: `${horizontalProgress * 100}%`,
+            });
           }
         },
       });
@@ -228,7 +267,7 @@ export function MarqueeScroller() {
       pinnedCloneRef.current?.remove();
       flipRef.current?.kill();
     };
-  }, []);
+  }, [maxImageShift, maxTranslate]);
 
   return (
     <div
@@ -236,13 +275,13 @@ export function MarqueeScroller() {
       className={`wjy-shell ${plusJakarta.variable} ${playfair.variable}`}
       style={{
         ["--wjy-light" as string]: "#edf1e8",
-        ["--wjy-dark" as string]: "#101010",
+        ["--wjy-dark" as string]: "#0e0b09",
       }}
     >
       <section className="wjy-hero">
         <h1>
-          Salathai giới thiệu hành trình ẩm thực Thái hiện đại: nguyên liệu tươi
-          mỗi ngày, gia vị cân bằng và không gian ấm áp cho mọi cuộc hẹn.
+          Salathai mo hanh trinh am thuc Thai hien dai: nguyen lieu tuoi, gia vi
+          can bang va khong gian am ap cho moi cuoc hen.
         </h1>
       </section>
 
@@ -262,10 +301,16 @@ export function MarqueeScroller() {
       </section>
 
       <section className="wjy-horizontal">
-        <div className="wjy-horizontal-wrapper">
+        <div
+          className="wjy-horizontal-wrapper"
+          style={{
+            ["--wjy-slide-count" as string]: totalPanels,
+          }}
+        >
           <div className="wjy-horizontal-slide wjy-horizontal-spacer" />
           {slides.map((slide, idx) => (
             <div key={slide.image} className="wjy-horizontal-slide">
+              <div className="wjy-slide-tag">{slide.tag}</div>
               <div className="col text">
                 <h3>{slide.text}</h3>
               </div>
@@ -275,12 +320,15 @@ export function MarqueeScroller() {
             </div>
           ))}
         </div>
+        <div className="wjy-progress">
+          <div ref={progressRef} className="bar" />
+        </div>
       </section>
 
       <section className="wjy-outro">
         <h1>
-          Gặp gỡ Salathai: nơi hương thơm lá chanh, cà ri và than lửa hòa cùng
-          câu chuyện mới mỗi tối.
+          Gap go Salathai: noi huong la chanh, ca ri va than lua hoa cung cau
+          chuyen moi moi toi.
         </h1>
       </section>
     </div>

@@ -1,6 +1,16 @@
 {
   "home": {
-    "welcome": "Chào mừng bạn đến với ứng dụng của chúng tôi!"
+    "welcome": "Chào mừng bạn đến với ứng dụng của chúng tôi!",
+    "scrollStroke": {
+      "card1Title": "Đặt trước món Thái, lấy đúng giờ",
+      "card1Body": "Khách đặt trước tại Sala Thai, chúng tôi gom hàng và sắp xếp thời gian lấy để pad thai và cà ri xanh luôn nóng hổi ngay khi bạn bước vào—không phải chờ đợi, chỉ cần quét mã và lấy.",
+      "card2Title": "Giờ cao điểm vẫn mượt với Sala Thái",
+      "card2Body": "Khi đông khách chiều tối, Sala Thái gom đơn online và tại quầy vào một luồng rõ ràng; bếp ra món tuần tự, khách biết chính xác khi nào món lên quầy.",
+      "img1Alt": "Quầy Sala Thai với khách đặt món Thái trước",
+      "img2Alt": "Bảng điều phối đơn pickup của Sala Thai",
+      "img3Alt": "Bếp thao tác theo hàng đợi pickup của Sala Thai",
+      "img4Alt": "Khách nhận món Thái tại quầy pickup Sala Thai"
+    }
   },
   "notFound": {
     "title": "Không tìm thấy trang",
