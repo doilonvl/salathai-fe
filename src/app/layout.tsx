@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   title: { default: "Salathai", template: "%s | Salathai" },
   description: "Salathai - Your Gateway to Authentic Thai Cuisine and Culture",
   icons: {
-    icon: [{ url: "/Logo/Logo1.jpg", rel: "icon", type: "image/jpeg" }],
+    icon: [{ url: "/Logo/Logo1.png", rel: "icon", type: "image/jpeg" }],
   },
 };
 

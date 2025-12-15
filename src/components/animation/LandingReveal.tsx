@@ -576,7 +576,7 @@ export function LandingReveal() {
       {showCenterLogo && (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
           <img
-            src="/Logo/Logo1.jpg"
+            src="/Logo/Logo1.png"
             alt="Salathai logo"
             className="lr-center-logo h-10 w-10 md:h-12 md:w-12 rounded-full object-contain opacity-85 drop-shadow-lg"
           />
