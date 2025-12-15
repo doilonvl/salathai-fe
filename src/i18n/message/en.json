@@ -10,6 +10,10 @@
       "img2Alt": "Dashboard grouping Sala Thai pickup orders",
       "img3Alt": "Kitchen workflow following the Sala Thai pickup queue",
       "img4Alt": "Customer receiving a Thai dish at the Sala Thai pickup counter"
+    },
+    "marquee": {
+      "intro": "Salathai opens a modern Thai culinary journey: fresh ingredients, balanced spices, and a cozy space for every meetup.",
+      "outro": "Meet Salathai: where kaffir lime, curries, and charcoal fire weave every night's stories."
     }
   },
   "header": {

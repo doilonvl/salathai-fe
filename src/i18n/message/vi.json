@@ -10,6 +10,10 @@
       "img2Alt": "Bảng điều phối đơn pickup của Sala Thai",
       "img3Alt": "Bếp thao tác theo hàng đợi pickup của Sala Thai",
       "img4Alt": "Khách nhận món Thái tại quầy pickup Sala Thai"
+    },
+    "marquee": {
+      "intro": "Salathai mở hành trình ẩm thực Thái hiện đại: nguyên liệu tươi, gia vị cân bằng và không gian ấm áp cho mọi cuộc hẹn.",
+      "outro": "Gặp gỡ Salathai: nơi hương lá chanh, cà ri và than lửa hòa cùng câu chuyện mỗi tối."
     }
   },
   "header": {

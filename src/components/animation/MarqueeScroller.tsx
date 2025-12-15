@@ -4,7 +4,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Flip } from "gsap/Flip";
 import Lenis from "lenis";
 import { Plus_Jakarta_Sans, Playfair_Display } from "next/font/google";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import type { Locale } from "@/types/content";
 import {
   useGetMarqueeImagesQuery,
@@ -253,6 +253,7 @@ function pickLocalized(
 
 export function MarqueeScroller() {
   const locale = useLocale() as Locale;
+  const t = useTranslations("home.marquee");
   const [isMobile, setIsMobile] = useState(false);
   const { data: marqueeImagesData } = useGetMarqueeImagesQuery();
   const { data: marqueeSlidesData } = useGetMarqueeSlidesQuery();
@@ -542,10 +543,7 @@ export function MarqueeScroller() {
       }}
     >
       <section className="wjy-hero">
-        <h1>
-          Salathai mo hanh trinh am thuc Thai hien dai: nguyen lieu tuoi, gia vi
-          can bang va khong gian am ap cho moi cuoc hen.
-        </h1>
+        <h1>{t("intro")}</h1>
       </section>
 
       <section className="wjy-marquee">
@@ -597,10 +595,7 @@ export function MarqueeScroller() {
       </section>
 
       <section className="wjy-outro">
-        <h1>
-          Gap go Salathai: noi huong la chanh, ca ri va than lua hoa cung cau
-          chuyen moi moi toi.
-        </h1>
+        <h1>{t("outro")}</h1>
       </section>
     </div>
   );
