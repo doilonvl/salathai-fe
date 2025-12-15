@@ -27,6 +27,12 @@ type NavItem = {
 const NAV_ITEMS: NavItem[] = [
   { key: "dashboard", label: "Dashboard", icon: LayoutDashboard, slug: "" },
   { key: "landing", label: "Landing menu", icon: Images, slug: "landing-menu" },
+  {
+    key: "marquee-slides",
+    label: "Marquee slides",
+    icon: Images,
+    slug: "marquee-slides",
+  },
   { key: "products", label: "Products", icon: Boxes, slug: "products" },
 ];
 

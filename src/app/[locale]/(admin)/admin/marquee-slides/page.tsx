@@ -30,38 +30,47 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
-  useCreateLandingMenuMutation,
-  useDeleteLandingMenuMutation,
-  useGetLandingMenuAdminQuery,
-  useUpdateLandingMenuMutation,
-  useUploadSingleMutation,
-} from "@/services/admin.landing-menu";
-import type { LandingMenuItem } from "@/types/landing";
+  useCreateMarqueeSlideMutation,
+  useDeleteMarqueeSlideMutation,
+  useGetMarqueeSlidesAdminQuery,
+  useUpdateMarqueeSlideMutation,
+} from "@/services/admin.marquee-slides";
+import { useUploadSingleMutation } from "@/services/admin.landing-menu";
+import type { MarqueeSlide } from "@/types/marquee";
 
 type FormState = {
   imageUrl: string;
-  altText: string;
-  altVi: string;
-  altEn: string;
+  tag: string;
+  tagVi: string;
+  tagEn: string;
+  text: string;
+  textVi: string;
+  textEn: string;
   orderIndex: number;
   isActive: boolean;
 };
 
 const emptyForm: FormState = {
   imageUrl: "",
-  altText: "",
-  altVi: "",
-  altEn: "",
+  tag: "",
+  tagVi: "",
+  tagEn: "",
+  text: "",
+  textVi: "",
+  textEn: "",
   orderIndex: 1,
   isActive: true,
 };
 
-function toFormState(item: LandingMenuItem): FormState {
+function toForm(item: MarqueeSlide): FormState {
   return {
     imageUrl: item.imageUrl,
-    altText: item.altText || "",
-    altVi: item.altText_i18n?.vi || "",
-    altEn: item.altText_i18n?.en || "",
+    tag: item.tag || "",
+    tagVi: item.tag_i18n?.vi || "",
+    tagEn: item.tag_i18n?.en || "",
+    text: item.text || "",
+    textVi: item.text_i18n?.vi || "",
+    textEn: item.text_i18n?.en || "",
     orderIndex: item.orderIndex,
     isActive: item.isActive,
   };
@@ -70,10 +79,15 @@ function toFormState(item: LandingMenuItem): FormState {
 function buildPayload(form: FormState) {
   return {
     imageUrl: form.imageUrl.trim(),
-    altText: form.altText.trim(),
-    altText_i18n: {
-      vi: form.altVi.trim(),
-      en: form.altEn.trim(),
+    tag: form.tag.trim() || form.tagVi.trim() || form.tagEn.trim(),
+    tag_i18n: {
+      vi: form.tagVi.trim(),
+      en: form.tagEn.trim(),
+    },
+    text: form.text.trim() || form.textVi.trim() || form.textEn.trim(),
+    text_i18n: {
+      vi: form.textVi.trim(),
+      en: form.textEn.trim(),
     },
     orderIndex: Number(form.orderIndex) || 0,
     isActive: form.isActive,
@@ -89,47 +103,36 @@ function StatusBadge({ active }: { active: boolean }) {
           : "bg-neutral-100 text-neutral-600 border border-neutral-200"
       }`}
     >
-      {active ? (
-        <Eye className="h-3.5 w-3.5" />
-      ) : (
-        <EyeOff className="h-3.5 w-3.5" />
-      )}
+      {active ? <Eye className="h-3.5 w-3.5" /> : <EyeOff className="h-3.5 w-3.5" />}
       {active ? "Hiển thị" : "Ẩn"}
     </span>
   );
 }
 
-export default function LandingMenuAdminPage() {
-  const { data, isFetching, isError, refetch } = useGetLandingMenuAdminQuery();
-  const [createLandingMenu, { isLoading: creating }] =
-    useCreateLandingMenuMutation();
-  const [updateLandingMenu, { isLoading: updating }] =
-    useUpdateLandingMenuMutation();
-  const [deleteLandingMenu, { isLoading: deleting }] =
-    useDeleteLandingMenuMutation();
+export default function MarqueeSlidesAdminPage() {
+  const { data, isFetching, isError, refetch } = useGetMarqueeSlidesAdminQuery();
+  const [createSlide, { isLoading: creating }] = useCreateMarqueeSlideMutation();
+  const [updateSlide, { isLoading: updating }] = useUpdateMarqueeSlideMutation();
+  const [deleteSlide, { isLoading: deleting }] = useDeleteMarqueeSlideMutation();
   const [uploadSingle, { isLoading: uploading }] = useUploadSingleMutation();
 
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [editing, setEditing] = useState<LandingMenuItem | null>(null);
+  const [pendingDelete, setPendingDelete] = useState<MarqueeSlide | null>(null);
+  const [editing, setEditing] = useState<MarqueeSlide | null>(null);
   const [form, setForm] = useState<FormState>(emptyForm);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const [pendingDelete, setPendingDelete] = useState<LandingMenuItem | null>(
-    null
-  );
-  const deleteDialogOpen = pendingDelete !== null;
 
   const items = useMemo(() => {
     const list = (data?.items ?? []).slice();
-    list.sort((a: { orderIndex: number; createdAt: string; }, b: { orderIndex: number; createdAt: string; }) => {
-      if (a.orderIndex === b.orderIndex) {
-        return a.createdAt.localeCompare(b.createdAt);
-      }
+    list.sort((a, b) => {
+      if (a.orderIndex === b.orderIndex) return a.createdAt.localeCompare(b.createdAt);
       return a.orderIndex - b.orderIndex;
     });
     return list;
   }, [data?.items]);
 
   const saving = creating || updating;
+  const deleteDialogOpen = pendingDelete !== null;
 
   const resetForm = (orderIndex?: number) => {
     setForm({
@@ -144,48 +147,45 @@ export default function LandingMenuAdminPage() {
     const payload = buildPayload(form);
     try {
       if (editing) {
-        await updateLandingMenu({ id: editing.id, body: payload }).unwrap();
-        toast.success("Đã cập nhật mục landing menu.");
+        await updateSlide({ id: editing.id, body: payload }).unwrap();
+        toast.success("Đã cập nhật slide.");
       } else {
-        await createLandingMenu(payload).unwrap();
-        toast.success("Đã thêm mục landing menu.");
+        await createSlide(payload).unwrap();
+        toast.success("Đã thêm slide.");
       }
       setDialogOpen(false);
       resetForm();
     } catch (err) {
-      console.error("SAVE_LANDING_MENU_FAILED", err);
+      console.error("SAVE_SLIDE_FAILED", err);
       toast.error("Không thể lưu, vui lòng thử lại.");
     }
   };
 
-  const handleEdit = (item: LandingMenuItem) => {
+  const handleEdit = (item: MarqueeSlide) => {
     setEditing(item);
-    setForm(toFormState(item));
+    setForm(toForm(item));
     setDialogOpen(true);
+  };
+
+  const handleToggle = async (item: MarqueeSlide) => {
+    try {
+      await updateSlide({ id: item.id, body: { isActive: !item.isActive } }).unwrap();
+    } catch (err) {
+      console.error("TOGGLE_SLIDE_FAILED", err);
+      toast.error("Không thể cập nhật trạng thái.");
+    }
   };
 
   const handleDeleteConfirmed = async () => {
     if (!pendingDelete) return;
     try {
-      await deleteLandingMenu(pendingDelete.id).unwrap();
+      await deleteSlide(pendingDelete.id).unwrap();
       toast.success("Đã xoá.");
     } catch (err) {
-      console.error("DELETE_LANDING_MENU_FAILED", err);
+      console.error("DELETE_SLIDE_FAILED", err);
       toast.error("Xoá thất bại.");
     } finally {
       setPendingDelete(null);
-    }
-  };
-
-  const handleToggle = async (item: LandingMenuItem) => {
-    try {
-      await updateLandingMenu({
-        id: item.id,
-        body: { isActive: !item.isActive },
-      }).unwrap();
-    } catch (err) {
-      console.error("TOGGLE_LANDING_MENU_FAILED", err);
-      toast.error("Không thể cập nhật trạng thái.");
     }
   };
 
@@ -201,11 +201,9 @@ export default function LandingMenuAdminPage() {
       <Card className="shadow-sm">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
           <div>
-            <CardTitle className="text-xl font-semibold">
-              Landing Menu
-            </CardTitle>
+            <CardTitle className="text-xl font-semibold">Marquee Slides</CardTitle>
             <p className="text-sm text-muted-foreground">
-              Quản lý hình ảnh, alt text và thứ tự hiển thị trên landing page.
+              Quản lý slide hiển thị trong phần marquee (carousel ngang).
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -223,7 +221,7 @@ export default function LandingMenuAdminPage() {
               <Dialog.Trigger asChild>
                 <Button size="sm">
                   <Plus className="mr-2 h-4 w-4" />
-                  Thêm mục
+                  Thêm slide
                 </Button>
               </Dialog.Trigger>
               <Dialog.Portal>
@@ -233,10 +231,10 @@ export default function LandingMenuAdminPage() {
                     <div className="flex items-center justify-between">
                       <div>
                         <Dialog.Title className="text-lg font-semibold">
-                          {editing ? "Chỉnh sửa" : "Thêm mục"}
+                          {editing ? "Chỉnh sửa slide" : "Thêm slide"}
                         </Dialog.Title>
                         <Dialog.Description className="text-sm text-muted-foreground">
-                          Điền alt text, link ảnh và thứ tự hiển thị.
+                          Điền nội dung, alt và thứ tự hiển thị.
                         </Dialog.Description>
                       </div>
                       <Dialog.Close asChild>
@@ -270,10 +268,9 @@ export default function LandingMenuAdminPage() {
                               try {
                                 const res = await uploadSingle({
                                   file,
-                                  folder: "landing-menu",
+                                  folder: "marquee-slides",
                                 }).unwrap();
-                                const url =
-                                  (res as any)?.secure_url || (res as any)?.url;
+                                const url = (res as any)?.secure_url || (res as any)?.url;
                                 if (url) {
                                   setForm((f) => ({ ...f, imageUrl: url }));
                                   toast.success("Đã upload ảnh.");
@@ -284,8 +281,7 @@ export default function LandingMenuAdminPage() {
                                 console.error("UPLOAD_FAILED", err);
                                 toast.error("Upload ảnh thất bại.");
                               } finally {
-                                if (fileInputRef.current)
-                                  fileInputRef.current.value = "";
+                                if (fileInputRef.current) fileInputRef.current.value = "";
                               }
                             }}
                           />
@@ -296,9 +292,7 @@ export default function LandingMenuAdminPage() {
                             onClick={() => fileInputRef.current?.click()}
                             disabled={uploading}
                           >
-                            {uploading
-                              ? "Đang upload..."
-                              : "Chọn file & upload"}
+                            {uploading ? "Đang upload..." : "Chọn file & upload"}
                           </Button>
                         </div>
                       </div>
@@ -316,67 +310,88 @@ export default function LandingMenuAdminPage() {
                             }))
                           }
                         />
+                        <div className="flex items-center justify-between rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2.5">
+                          <div>
+                            <p className="text-sm font-semibold">Hiển thị</p>
+                            <p className="text-xs text-muted-foreground">
+                              Bật/tắt slide trên giao diện.
+                            </p>
+                          </div>
+                          <Switch
+                            checked={form.isActive}
+                            onCheckedChange={(checked) =>
+                              setForm((f) => ({ ...f, isActive: checked }))
+                            }
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <div className="space-y-2">
+                        <Label htmlFor="tag">Tag mặc định</Label>
+                        <Input
+                          id="tag"
+                          value={form.tag}
+                          onChange={(e) => setForm((f) => ({ ...f, tag: e.target.value }))}
+                          placeholder="Warm up / Signature..."
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="tagVi">Tag (VI)</Label>
+                        <Input
+                          id="tagVi"
+                          value={form.tagVi}
+                          onChange={(e) => setForm((f) => ({ ...f, tagVi: e.target.value }))}
+                          placeholder="Thẻ tiếng Việt"
+                        />
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="altText">Alt text mặc định</Label>
+                      <Label htmlFor="tagEn">Tag (EN)</Label>
                       <Input
-                        id="altText"
-                        value={form.altText}
-                        onChange={(e) =>
-                          setForm((f) => ({ ...f, altText: e.target.value }))
-                        }
-                        placeholder="Mô tả ngắn cho ảnh"
+                        id="tagEn"
+                        value={form.tagEn}
+                        onChange={(e) => setForm((f) => ({ ...f, tagEn: e.target.value }))}
+                        placeholder="Tag in English"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="text">Nội dung mặc định</Label>
+                      <Input
+                        id="text"
+                        value={form.text}
+                        onChange={(e) => setForm((f) => ({ ...f, text: e.target.value }))}
+                        placeholder="Mô tả ngắn"
                       />
                     </div>
                     <div className="grid gap-4 md:grid-cols-2">
                       <div className="space-y-2">
-                        <Label htmlFor="altVi">Alt (VI)</Label>
+                        <Label htmlFor="textVi">Nội dung (VI)</Label>
                         <Input
-                          id="altVi"
-                          value={form.altVi}
-                          onChange={(e) =>
-                            setForm((f) => ({ ...f, altVi: e.target.value }))
-                          }
+                          id="textVi"
+                          value={form.textVi}
+                          onChange={(e) => setForm((f) => ({ ...f, textVi: e.target.value }))}
                           placeholder="Mô tả tiếng Việt"
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="altEn">Alt (EN)</Label>
+                        <Label htmlFor="textEn">Nội dung (EN)</Label>
                         <Input
-                          id="altEn"
-                          value={form.altEn}
-                          onChange={(e) =>
-                            setForm((f) => ({ ...f, altEn: e.target.value }))
-                          }
+                          id="textEn"
+                          value={form.textEn}
+                          onChange={(e) => setForm((f) => ({ ...f, textEn: e.target.value }))}
                           placeholder="Description in English"
                         />
                       </div>
                     </div>
-                    <div className="flex items-center justify-between rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2.5">
-                      <div>
-                        <p className="text-sm font-semibold">Hiển thị</p>
-                        <p className="text-xs text-muted-foreground">
-                          Bật/tắt mục này trên landing page.
-                        </p>
-                      </div>
-                      <Switch
-                        checked={form.isActive}
-                        onCheckedChange={(checked) =>
-                          setForm((f) => ({ ...f, isActive: checked }))
-                        }
-                      />
-                    </div>
                     <div className="flex items-center justify-end gap-3 pt-2">
                       <Dialog.Close asChild>
-                        <Button type="button" variant="ghost">
+                        <Button type="button" variant="ghost" disabled={saving}>
                           Huỷ
                         </Button>
                       </Dialog.Close>
                       <Button type="submit" disabled={saving}>
-                        {saving && (
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        )}
+                        {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                         {editing ? "Lưu thay đổi" : "Tạo mới"}
                       </Button>
                     </div>
@@ -392,8 +407,9 @@ export default function LandingMenuAdminPage() {
               <TableHeader>
                 <TableRow>
                   <TableHead className="w-[80px]">Thứ tự</TableHead>
-                  <TableHead className="w-[120px]">Ảnh</TableHead>
-                  <TableHead>Alt text</TableHead>
+                  <TableHead className="w-[140px]">Ảnh</TableHead>
+                  <TableHead>Tag</TableHead>
+                  <TableHead>Nội dung</TableHead>
                   <TableHead>Trạng thái</TableHead>
                   <TableHead>Cập nhật</TableHead>
                   <TableHead className="text-right">Thao tác</TableHead>
@@ -402,26 +418,22 @@ export default function LandingMenuAdminPage() {
               <TableBody>
                 {items.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center text-sm">
-                      {isError
-                        ? "Tải dữ liệu thất bại."
-                        : "Chưa có mục landing menu."}
+                    <TableCell colSpan={7} className="text-center text-sm">
+                      {isError ? "Tải dữ liệu thất bại." : "Chưa có slide nào."}
                     </TableCell>
                   </TableRow>
                 )}
                 {items.map((item) => (
                   <TableRow key={item.id}>
-                    <TableCell className="font-semibold">
-                      #{item.orderIndex}
-                    </TableCell>
+                    <TableCell className="font-semibold">#{item.orderIndex}</TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
-                        <div className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-md border bg-white">
+                        <div className="flex h-16 w-24 items-center justify-center overflow-hidden rounded-md border bg-white">
                           {item.imageUrl ? (
                             // eslint-disable-next-line @next/next/no-img-element
                             <img
                               src={item.imageUrl}
-                              alt={item.altText || "Landing menu"}
+                              alt={item.tag || "Marquee slide"}
                               className="h-full w-full object-cover"
                             />
                           ) : (
@@ -432,14 +444,19 @@ export default function LandingMenuAdminPage() {
                     </TableCell>
                     <TableCell className="align-middle">
                       <p className="text-sm font-semibold text-neutral-900">
-                        {item.altText || "Chưa có alt"}
+                        {item.tag || "Chưa có tag"}
                       </p>
                       <p className="text-xs text-muted-foreground">
-                        VI: {item.altText_i18n?.vi || "-"}
+                        VI: {item.tag_i18n?.vi || "-"}
                       </p>
                       <p className="text-xs text-muted-foreground">
-                        EN: {item.altText_i18n?.en || "-"}
+                        EN: {item.tag_i18n?.en || "-"}
                       </p>
+                    </TableCell>
+                    <TableCell className="align-middle">
+                      <p className="text-sm text-neutral-900">{item.text || "-"}</p>
+                      <p className="text-xs text-muted-foreground">VI: {item.text_i18n?.vi || "-"}</p>
+                      <p className="text-xs text-muted-foreground">EN: {item.text_i18n?.en || "-"}</p>
                     </TableCell>
                     <TableCell>
                       <StatusBadge active={item.isActive} />
@@ -457,11 +474,7 @@ export default function LandingMenuAdminPage() {
                         >
                           {item.isActive ? "Ẩn" : "Hiển thị"}
                         </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleEdit(item)}
-                        >
+                        <Button variant="ghost" size="sm" onClick={() => handleEdit(item)}>
                           <Pencil className="mr-1 h-4 w-4" />
                           Sửa
                         </Button>
@@ -491,12 +504,10 @@ export default function LandingMenuAdminPage() {
         }}
         onConfirm={handleDeleteConfirmed}
         loading={deleting}
-        title="Xoá mục này?"
+        title="Xoá slide này?"
         description={
           pendingDelete
-            ? `Bạn chắc chắn xoá "${
-                pendingDelete.altText || pendingDelete.imageUrl
-              }" khỏi landing menu?`
+            ? `Bạn chắc chắn xoá slide "${pendingDelete.tag || pendingDelete.imageUrl}"?`
             : undefined
         }
       />

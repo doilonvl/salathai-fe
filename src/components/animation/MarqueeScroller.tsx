@@ -317,11 +317,25 @@ export function MarqueeScroller() {
   }, [marqueeItems]);
   const slides = useMemo(() => {
     const items = marqueeSlidesData?.items ?? FALLBACK_MARQUEE_SLIDES;
-    return items.map((item) => ({
+    const localized = items.map((item) => ({
       ...item,
       tag: pickLocalized(item.tag_i18n, locale, item.tag),
       text: pickLocalized(item.text_i18n, locale, item.text),
     }));
+    // Đảm bảo tối thiểu 3 slide để layout ổn định kể cả khi admin tắt bớt.
+    if (localized.length >= 3) return localized;
+    const padded = [...localized];
+    let idx = 0;
+    while (padded.length < 3 && localized.length > 0) {
+      const src = localized[idx % localized.length];
+      padded.push({
+        ...src,
+        id: `${src.id}-dup-${padded.length}`,
+        orderIndex: src.orderIndex + padded.length,
+      });
+      idx++;
+    }
+    return padded;
   }, [locale, marqueeSlidesData]);
   const totalPanels = slides.length + 1; // spacer + slides
   const maxTranslate =

@@ -17,7 +17,7 @@ import { Separator } from "@/components/ui/separator";
 import {
   useGetLandingMenuAdminQuery,
   useUpdateLandingMenuMutation,
-} from "@/services/api";
+} from "@/services/admin.landing-menu";
 import type { LandingMenuItem } from "@/types/landing";
 
 function StatPill({
