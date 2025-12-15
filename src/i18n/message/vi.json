@@ -3,13 +3,64 @@
     "welcome": "Chào mừng bạn đến với ứng dụng của chúng tôi!",
     "scrollStroke": {
       "card1Title": "Đặt trước món Thái, lấy đúng giờ",
-      "card1Body": "Khách đặt trước tại Sala Thai, chúng tôi gom hàng và sắp xếp thời gian lấy để pad thai và cà ri xanh luôn nóng hổi ngay khi bạn bước vào—không phải chờ đợi, chỉ cần quét mã và lấy.",
+      "card1Body": "Khách đặt trước tại Sala Thai, chúng tôi gom hàng và sắp xếp thời gian lấy để pad thai và cà ri xanh luôn nóng hổi ngay khi bạn bước vào—không cần đợi, chỉ cần quét mã và lấy.",
       "card2Title": "Giờ cao điểm vẫn mượt với Sala Thái",
-      "card2Body": "Khi đông khách chiều tối, Sala Thái gom đơn online và tại quầy vào một luồng rõ ràng; bếp ra món tuần tự, khách biết chính xác khi nào món lên quầy.",
+      "card2Body": "Khi đón khách chiều tối, Sala Thái gom đơn online và tại quầy vào một luồng rõ ràng; bếp ra món tuần tự, khách biết chính xác khi nào món lên quầy.",
       "img1Alt": "Quầy Sala Thai với khách đặt món Thái trước",
       "img2Alt": "Bảng điều phối đơn pickup của Sala Thai",
       "img3Alt": "Bếp thao tác theo hàng đợi pickup của Sala Thai",
       "img4Alt": "Khách nhận món Thái tại quầy pickup Sala Thai"
+    }
+  },
+  "header": {
+    "home": "Trang chủ",
+    "reservations": "Đặt bàn",
+    "contact": "Liên hệ"
+  },
+  "languageSwitcher": {
+    "ariaLabel": "Thay đổi ngôn ngữ"
+  },
+  "reservation": {
+    "sectionTitle": "Reservations",
+    "heading": "Đặt bàn theo ý bạn",
+    "description": "Chọn số khách, thời gian dùng bữa và để lại thông tin liên hệ. Chúng tôi sẽ phản hồi xác nhận ngay khi tiếp nhận.",
+    "fullNameLabel": "Họ và tên",
+    "fullNamePlaceholder": "Nguyễn Văn A",
+    "phoneLabel": "Số điện thoại",
+    "phonePlaceholder": "090 123 4567",
+    "emailLabel": "Email (nhận xác nhận)",
+    "emailPlaceholder": "ban@salathai.vn",
+    "guestLabel": "Số khách",
+    "dateLabel": "Ngày",
+    "timeLabel": "Giờ (24h)",
+    "noteLabel": "Ghi chú thêm",
+    "notePlaceholder": "Yêu cầu món chay, vị trí bàn mong muốn, dịp đặc biệt...",
+    "submit": "Đặt bàn",
+    "submitting": "Đang gửi...",
+    "privacy": "Chúng tôi cam kết bảo mật thông tin và chỉ dùng để xác nhận đặt bàn.",
+    "successTitle": "Đặt bàn thành công",
+    "successDesc": "Chúng tôi sẽ liên hệ xác nhận trong ít phút.",
+    "errorTitle": "Gửi yêu cầu thất bại",
+    "errorDesc": "Không thể gửi yêu cầu, vui lòng thử lại sau.",
+    "contactLabel": "Liên hệ nhanh",
+    "addressLine": "20 Đường Thành, Hoàn Kiếm, Hà Nội",
+    "openingHourLabel": "Giờ mở cửa",
+    "emailLabelSecondary": "Email",
+    "arrivalNote": "Đặt bàn trực tuyến giúp giữ chỗ trong giờ cao điểm. Vui lòng đến sớm hơn 5 phút để được phục vụ tốt nhất.",
+    "validation": {
+      "fullNameMin": "Nhập họ tên đầy đủ (tối thiểu 3 ký tự).",
+      "fullNameMax": "Tên không vượt quá 80 ký tự.",
+      "fullNamePattern": "Tên chỉ chứa chữ cái, khoảng trắng và ký tự ', . hoặc -.",
+      "fullNameParts": "Vui lòng nhập đầy đủ họ và tên.",
+      "phone": "Số điện thoại chưa đúng định dạng (10 số, bắt đầu 0 hoặc +84).",
+      "email": "Email không hợp lệ",
+      "guestMin": "Tối thiểu 1 khách",
+      "guestMax": "Vui lòng liên hệ trực tiếp nếu trên 30 khách",
+      "dateRequired": "Chọn ngày",
+      "timeRequired": "Chọn giờ",
+      "timeInvalid": "Thời gian không hợp lệ.",
+      "timePast": "Vui lòng chọn thời gian ở hiện tại hoặc tương lai.",
+      "noteMax": "Ghi chú tối đa 400 ký tự"
     }
   },
   "notFound": {

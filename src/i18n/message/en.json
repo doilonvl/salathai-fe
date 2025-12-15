@@ -3,13 +3,64 @@
     "welcome": "Welcome to our application!",
     "scrollStroke": {
       "card1Title": "Pre-order Thai dishes, pick up right on time",
-      "card1Body": "Guests tap in early on Sala Thai, we batch the wok queue and time the pickup so pad thai and green curry stay hot the minute you step in—no waiting, just scan and go.",
+      "card1Body": "Guests order ahead at Sala Thai, we batch the queue and time the pickup so pad thai and green curry stay hot the minute you step in—no waiting, just scan and go.",
       "card2Title": "Rush hours stay smooth with Sala Thai",
       "card2Body": "During the evening rush, Sala Thai keeps online and walk-in orders in one clear lane; the kitchen fires in sequence, and guests know exactly when their order reaches the counter.",
       "img1Alt": "Sala Thai counter with a guest pre-ordering Thai food",
       "img2Alt": "Dashboard grouping Sala Thai pickup orders",
       "img3Alt": "Kitchen workflow following the Sala Thai pickup queue",
       "img4Alt": "Customer receiving a Thai dish at the Sala Thai pickup counter"
+    }
+  },
+  "header": {
+    "home": "Home",
+    "reservations": "Reservations",
+    "contact": "Contact"
+  },
+  "languageSwitcher": {
+    "ariaLabel": "Change language"
+  },
+  "reservation": {
+    "sectionTitle": "Reservations",
+    "heading": "Book a table your way",
+    "description": "Pick your guest count, dining time, and leave your contact details. We’ll confirm as soon as we receive it.",
+    "fullNameLabel": "Full name",
+    "fullNamePlaceholder": "John Smith",
+    "phoneLabel": "Phone number",
+    "phonePlaceholder": "090 123 4567",
+    "emailLabel": "Email (for confirmation)",
+    "emailPlaceholder": "you@example.com",
+    "guestLabel": "Guests",
+    "dateLabel": "Date",
+    "timeLabel": "Time (24h)",
+    "noteLabel": "Additional notes",
+    "notePlaceholder": "Dietary requests, preferred seating, special occasions...",
+    "submit": "Book table",
+    "submitting": "Sending...",
+    "privacy": "We keep your details private and only use them to confirm your booking.",
+    "successTitle": "Reservation submitted",
+    "successDesc": "We’ll contact you to confirm in a few minutes.",
+    "errorTitle": "Request failed",
+    "errorDesc": "Unable to send your request, please try again later.",
+    "contactLabel": "Quick contact",
+    "addressLine": "20 Duong Thanh, Hoan Kiem, Ha Noi",
+    "openingHourLabel": "Opening hours",
+    "emailLabelSecondary": "Email",
+    "arrivalNote": "Booking online secures your table during peak hours. Please arrive 5 minutes early for the best experience.",
+    "validation": {
+      "fullNameMin": "Enter your full name (at least 3 characters).",
+      "fullNameMax": "Name must be 80 characters or fewer.",
+      "fullNamePattern": "Name may include letters, spaces, and ', . or - characters.",
+      "fullNameParts": "Please include both first and last name.",
+      "phone": "Phone number is invalid (10 digits starting with 0 or +84).",
+      "email": "Email is not valid",
+      "guestMin": "At least 1 guest",
+      "guestMax": "For parties over 30, please contact us directly",
+      "dateRequired": "Select a date",
+      "timeRequired": "Select a time",
+      "timeInvalid": "Time is not valid.",
+      "timePast": "Please choose a time in the present or future.",
+      "noteMax": "Notes must be 400 characters or fewer"
     }
   },
   "notFound": {

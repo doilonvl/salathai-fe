@@ -143,15 +143,15 @@
   object-fit: cover;
 }
 
-.landing-reveal .lr-nav-item,
 .landing-reveal .lr-loader {
   clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
 }
 
 .landing-reveal .lr-nav-item {
   width: max-content;
-  height: 20px;
+  height: auto;
   margin-bottom: 0.125em;
+  clip-path: none;
 }
 
 .landing-reveal .lr-loader p,
@@ -225,10 +225,6 @@
   }
   .landing-reveal .lr-overlay-img {
     max-width: 88vw;
-  }
-  .lr-nav-btn {
-    left: 2%;
-    right: 2%;
   }
   .landing-reveal button {
     font-size: 12px;

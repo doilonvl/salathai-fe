@@ -6,6 +6,12 @@ import type {
   FetchBaseQueryError,
 } from "@reduxjs/toolkit/query";
 import type { Paged, Locale, LocalizedString } from "@/types/content";
+import type { LandingMenuItem } from "@/types/landing";
+import type { MarqueeImage, MarqueeSlide } from "@/types/marquee";
+import type {
+  ReservationRequestPayload,
+  ReservationRequestResponse,
+} from "@/types/reservation";
 
 const BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "") ||
@@ -26,6 +32,12 @@ function pickLocalized(
 function getClientToken() {
   if (typeof window === "undefined") return null;
   return localStorage.getItem("access_token");
+}
+
+function optimizeCloudinaryUrl(url: string, options = "f_auto,q_auto,w_1400") {
+  if (!url || !url.includes("res.cloudinary.com")) return url;
+  if (url.includes(`/upload/${options}/`)) return url;
+  return url.replace("/upload/", `/upload/${options}/`);
 }
 
 const rawBaseQuery = fetchBaseQuery({
@@ -83,7 +95,79 @@ export const api = createApi({
   tagTypes: ["Products", "Home"],
   endpoints: (builder) => ({
     // -------- HOME --------
+    getLandingMenu: builder.query<Paged<LandingMenuItem>, void>({
+      query: () => ({
+        url: "/landing-menu",
+      }),
+      transformResponse: (response: Paged<LandingMenuItem>) => ({
+        ...response,
+        items: response.items
+          .filter((item) => item.isActive)
+          .sort((a, b) => a.orderIndex - b.orderIndex)
+          .map((item) => ({
+            ...item,
+            imageUrl: optimizeCloudinaryUrl(item.imageUrl),
+          })),
+      }),
+      providesTags: ["Home"],
+      keepUnusedDataFor: 300,
+    }),
+    getMarqueeImages: builder.query<Paged<MarqueeImage>, void>({
+      query: () => ({
+        url: "/marquee-images",
+      }),
+      transformResponse: (response: Paged<MarqueeImage>) => ({
+        ...response,
+        items: response.items
+          .filter((item) => item.isActive)
+          .sort((a, b) => a.orderIndex - b.orderIndex)
+          .map((item) => ({
+            ...item,
+            imageUrl: optimizeCloudinaryUrl(
+              item.imageUrl,
+              "f_auto,q_auto,w_1200"
+            ),
+          })),
+      }),
+      providesTags: ["Home"],
+      keepUnusedDataFor: 300,
+    }),
+    getMarqueeSlides: builder.query<Paged<MarqueeSlide>, void>({
+      query: () => ({
+        url: "/marquee-slides",
+      }),
+      transformResponse: (response: Paged<MarqueeSlide>) => ({
+        ...response,
+        items: response.items
+          .filter((item) => item.isActive)
+          .sort((a, b) => a.orderIndex - b.orderIndex)
+          .map((item) => ({
+            ...item,
+            imageUrl: optimizeCloudinaryUrl(
+              item.imageUrl,
+              "f_auto,q_auto,w_1400"
+            ),
+          })),
+      }),
+      providesTags: ["Home"],
+      keepUnusedDataFor: 300,
+    }),
+    createReservationRequest: builder.mutation<
+      ReservationRequestResponse,
+      ReservationRequestPayload
+    >({
+      query: (body) => ({
+        url: "/reservation-requests",
+        method: "POST",
+        body,
+      }),
+    }),
   }),
 });
 
-export const {} = api;
+export const {
+  useGetLandingMenuQuery,
+  useGetMarqueeImagesQuery,
+  useGetMarqueeSlidesQuery,
+  useCreateReservationRequestMutation,
+} = api;

@@ -90,7 +90,7 @@ export default function ScrollStrokePage({ className }: Props) {
   return (
     <div ref={containerRef} className={className}>
       <ReactLenis root>
-        <section className="spotlight relative flex w-full flex-col gap-40 overflow-hidden px-8 py-8">
+        <section className="spotlight relative flex w-full flex-col gap-40 overflow-hidden px-8 py-8 min-h-[130svh] md:min-h-[100svh]">
           <div className="row mx-auto flex max-w-6xl flex-col items-center justify-center gap-8 lg:flex-row">
             <div className="img mx-auto w-full max-w-4xl lg:w-2/3">
               <img
@@ -155,7 +155,7 @@ export default function ScrollStrokePage({ className }: Props) {
             </div>
           </div>
 
-          <div className="svg-path pointer-events-none absolute left-1/2 top-[15svh] h-[112%] w-[180%] -translate-x-1/2 -z-10 lg:top-[25svh] lg:h-[108%] lg:w-[80%]">
+          <div className="svg-path pointer-events-none absolute left-1/2 top-[12svh] h-[140%] w-[190%] -translate-x-1/2 -z-10 md:top-[18svh] md:h-[120%] md:w-[140%] lg:top-[25svh] lg:h-[108%] lg:w-[80%]">
             <svg
               viewBox="0 0 1378 2760"
               fill="none"
