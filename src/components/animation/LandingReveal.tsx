@@ -6,6 +6,7 @@ import { Flip } from "gsap/Flip";
 import { CustomEase } from "gsap/CustomEase";
 import { Plus_Jakarta_Sans, Playfair_Display } from "next/font/google";
 import { ReservationForm } from "@/components/shared/reservation-form";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import LanguageSwitcher from "@/components/shared/LanguageSwitcher";
 import { useTranslations } from "next-intl";
 import { useGetLandingMenuQuery } from "@/services/api";
@@ -692,12 +693,12 @@ export function LandingReveal() {
               >
                 X
               </button>
-              <div className="h-full overflow-y-auto rounded-3xl">
+              <ScrollArea className="h-full rounded-3xl">
                 <ReservationForm
                   variant="modal"
                   onSuccess={() => setShowReservationModal(false)}
                 />
-              </div>
+              </ScrollArea>
             </motion.div>
           </motion.div>
         )}

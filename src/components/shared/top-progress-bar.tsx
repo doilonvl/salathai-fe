@@ -59,24 +59,25 @@ export default function TopProgressBar() {
   return (
     <div className="pointer-events-none fixed inset-x-0 top-0 z-[9999] h-[3px]">
       <div className="relative h-full w-full overflow-hidden">
+        <div className="absolute inset-0 bg-black/12 backdrop-blur-[1px]" />
         {/* Glow nhẹ dưới bar cho sang */}
         <div className="pointer-events-none absolute inset-0 blur-sm opacity-70">
           <div
-            className="h-full w-full bg-gradient-to-r from-[#ff8905] via-[#05acfb] to-[#8fc542]"
+            className="h-full w-full bg-gradient-to-r from-[#ffe6a3] via-[#ffd06f] to-[#f4a93f]"
             style={{ width: `${progress}%` }}
           />
         </div>
 
         {/* Thanh chính */}
         <div
-          className="relative h-full rounded-full bg-gradient-to-r from-[#ff8905] via-[#05acfb] to-[#8fc542] shadow-[0_0_12px_rgba(0,0,0,0.35)]"
+          className="relative h-full rounded-full bg-gradient-to-r from-[#ffd06f] via-[#f7b84c] to-[#ef9a35] shadow-[0_0_12px_rgba(0,0,0,0.4)]"
           style={{
             width: `${progress}%`,
             transition: "width 0.18s ease-out",
           }}
         >
           {/* Đầu bar tròn để nhìn premium hơn */}
-          <div className="absolute -right-1 top-1/2 h-2 w-2 -translate-y-1/2 rounded-full bg-white/90 shadow-[0_0_8px_rgba(255,255,255,0.8)]" />
+          <div className="absolute -right-1 top-1/2 h-2 w-2 -translate-y-1/2 rounded-full bg-[#fff2c8] shadow-[0_0_8px_rgba(255,242,200,0.95)]" />
         </div>
       </div>
     </div>

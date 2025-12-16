@@ -40,7 +40,7 @@ export default function ScrollToTopButton() {
     <button
       type="button"
       onClick={smoothScrollToTop}
-      className="fixed bottom-6 right-6 z-[95] inline-flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-r from-[#05acfb] to-[#8fc542] text-white shadow-lg shadow-slate-400/40 transition hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#05acfb]"
+      className="fixed bottom-6 right-6 z-[95] inline-flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-r from-[#f6d37f] to-[#e0a24a] text-black shadow-lg shadow-amber-900/25 transition hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#e0a24a]"
       aria-label="Back to top"
       title="Back to top"
     >
