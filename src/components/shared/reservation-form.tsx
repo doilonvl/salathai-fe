@@ -152,7 +152,9 @@ export function ReservationForm({
   const t = useTranslations("reservation");
   const schema = useMemo(() => buildReservationSchema(t), [t]);
   const defaultDate = useMemo(() => formatDateInput(new Date()), []);
-  const [minSelectableTime, setMinSelectableTime] = useState<string | undefined>(undefined);
+  const [minSelectableTime, setMinSelectableTime] = useState<
+    string | undefined
+  >(undefined);
   const {
     register,
     handleSubmit,
@@ -246,13 +248,13 @@ export function ReservationForm({
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-              <label className="md:col-span-2 flex flex-col gap-2 text-sm font-medium">
+              <label className="md:col-span-2 flex min-w-0 flex-col gap-2 text-sm font-medium">
                 {t("fullNameLabel")}
                 <input
                   {...register("fullName")}
                   name="fullName"
                   placeholder={t("fullNamePlaceholder")}
-                  className="rounded-xl border border-neutral-200 bg-white px-3 py-2 text-sm outline-none transition focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
+                  className="w-full rounded-xl border border-neutral-200 bg-white px-3 py-2 text-sm outline-none transition focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
                   aria-invalid={Boolean(errors.fullName)}
                   autoComplete="name"
                 />
@@ -262,14 +264,14 @@ export function ReservationForm({
                   </p>
                 )}
               </label>
-              <label className="flex flex-col gap-2 text-sm font-medium">
+              <label className="flex min-w-0 flex-col gap-2 text-sm font-medium">
                 {t("phoneLabel")}
                 <input
                   {...register("phoneNumber")}
                   name="phoneNumber"
                   type="tel"
                   placeholder={t("phonePlaceholder")}
-                  className="rounded-xl border border-neutral-200 bg-white px-3 py-2 text-sm outline-none transition focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
+                  className="w-full rounded-xl border border-neutral-200 bg-white px-3 py-2 text-sm outline-none transition focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
                   aria-invalid={Boolean(errors.phoneNumber)}
                   autoComplete="tel"
                 />
@@ -282,14 +284,14 @@ export function ReservationForm({
             </div>
 
             <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4">
-              <label className="col-span-2 md:col-span-2 flex flex-col gap-2 text-sm font-medium">
+              <label className="col-span-2 md:col-span-2 flex min-w-0 flex-col gap-2 text-sm font-medium">
                 {t("emailLabel")}
                 <input
                   {...register("email")}
                   name="email"
                   type="email"
                   placeholder={t("emailPlaceholder")}
-                  className="rounded-xl border border-neutral-200 bg-white px-3 py-2 text-sm outline-none transition focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
+                  className="w-full rounded-xl border border-neutral-200 bg-white px-3 py-2 text-sm outline-none transition focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
                   aria-invalid={Boolean(errors.email)}
                   autoComplete="email"
                 />
@@ -297,12 +299,12 @@ export function ReservationForm({
                   <p className="text-xs text-red-600">{errors.email.message}</p>
                 )}
               </label>
-              <label className="flex flex-col gap-2 text-sm font-medium">
+              <label className="flex min-w-0 flex-col gap-2 text-sm font-medium">
                 {t("guestLabel")}
                 <select
                   {...register("guestCount", { valueAsNumber: true })}
                   name="guestCount"
-                  className="rounded-xl border border-neutral-200 bg-white px-3 py-2 text-sm outline-none transition focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
+                  className="w-full rounded-xl border border-neutral-200 bg-white px-3 py-2 text-sm outline-none transition focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
                   aria-invalid={Boolean(errors.guestCount)}
                 >
                   {[1, 2, 3, 4, 5, 6, 8, 10, 12, 15, 20, 30].map((n) => (
@@ -317,14 +319,14 @@ export function ReservationForm({
                   </p>
                 )}
               </label>
-              <label className="flex flex-col gap-2 text-sm font-medium">
+              <label className="flex min-w-0 flex-col gap-2 text-sm font-medium">
                 {t("dateLabel")}
                 <input
                   {...register("reservationDate")}
                   name="reservationDate"
                   type="date"
                   min={defaultDate}
-                  className="rounded-xl border border-neutral-200 bg-white px-3 py-2 text-sm outline-none transition focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
+                  className="w-full rounded-xl border border-neutral-200 bg-white px-3 py-2 text-sm outline-none transition focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
                   aria-invalid={Boolean(errors.reservationDate)}
                 />
                 {errors.reservationDate && (
@@ -333,14 +335,14 @@ export function ReservationForm({
                   </p>
                 )}
               </label>
-              <label className="flex flex-col gap-2 text-sm font-medium">
+              <label className="flex min-w-0 flex-col gap-2 text-sm font-medium">
                 {t("timeLabel")}
                 <input
                   {...register("reservationTime")}
                   name="reservationTime"
                   type="time"
                   min={minSelectableTime}
-                  className="rounded-xl border border-neutral-200 bg-white px-3 py-2 text-sm outline-none transition focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
+                  className="w-full rounded-xl border border-neutral-200 bg-white px-3 py-2 text-sm outline-none transition focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
                   aria-invalid={Boolean(errors.reservationTime)}
                 />
                 {errors.reservationTime && (
@@ -351,14 +353,14 @@ export function ReservationForm({
               </label>
             </div>
 
-            <label className="flex flex-col gap-2 text-sm font-medium">
+            <label className="flex min-w-0 flex-col gap-2 text-sm font-medium">
               {t("noteLabel")}
               <textarea
                 {...register("note")}
                 name="note"
                 rows={3}
                 placeholder={t("notePlaceholder")}
-                className="rounded-xl border border-neutral-200 bg-white px-3 py-2 text-sm outline-none transition focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
+                className="w-full rounded-xl border border-neutral-200 bg-white px-3 py-2 text-sm outline-none transition focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
                 aria-invalid={Boolean(errors.note)}
               />
               {errors.note && (
@@ -379,7 +381,7 @@ export function ReservationForm({
           </form>
         </div>
 
-        <div className="space-y-4 rounded-2xl bg-white/70 p-5 backdrop-blur lg:col-span-2">
+        <div className="space-y-4 rounded-2xl bg-white/70 p-5 backdrop-blur lg:col-span-2 min-w-0">
           <div className="space-y-1">
             <p className="text-xs uppercase tracking-[0.18em] text-neutral-500">
               {t("contactLabel")}
@@ -393,17 +395,19 @@ export function ReservationForm({
             <p className="text-sm text-neutral-600">{t("addressLine")}</p>
           </div>
           <div className="grid grid-cols-2 gap-3 text-sm text-neutral-700">
-            <div className="rounded-xl border border-neutral-200/70 bg-white px-4 py-3">
+            <div className="min-w-0 rounded-xl border border-neutral-200/70 bg-white px-4 py-3">
               <p className="font-semibold text-neutral-900">
                 {t("openingHourLabel")}
               </p>
               <p>10:00 - 22:00</p>
             </div>
-            <div className="rounded-xl border border-neutral-200/70 bg-white px-4 py-3">
+            <div className="min-w-0 rounded-xl border border-neutral-200/70 bg-white px-4 py-3">
               <p className="font-semibold text-neutral-900">
                 {t("emailLabelSecondary")}
               </p>
-              <p>hello@salathai.vn</p>
+              <p className="break-words text-sm text-neutral-700">
+                salathaivietnam@gmail.com
+              </p>
             </div>
           </div>
           <div className="rounded-xl border border-orange-200 bg-orange-50 px-4 py-3 text-sm text-orange-700">
