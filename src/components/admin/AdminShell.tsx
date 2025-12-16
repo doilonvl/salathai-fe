@@ -3,7 +3,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams, usePathname, useRouter } from "next/navigation";
-import { Link } from "@/i18n/navigation";
+import { Link, getPathname } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
@@ -119,28 +119,51 @@ export default function AdminShell({
               {NAV_ITEMS.map((it) => {
                 const path = it.slug ? `/admin/${it.slug}` : "/admin";
                 const href = path;
-                const isDashboard = !it.slug;
-                const active = isDashboard
-                  ? pathname === `/${locale}/admin` ||
-                    pathname === `/${locale}/admin/`
-                  : pathname === `/${locale}${path}` ||
-                    pathname.startsWith(`/${locale}${path}/`);
+                const localizedPath = getPathname({
+                  href: path as any,
+                  locale: locale as any,
+                }) as string | undefined;
+                const matchesPrefix = (target?: string) =>
+                  target
+                    ? pathname === target ||
+                      pathname === `${target}/` ||
+                      pathname.startsWith(`${target}/`)
+                    : false;
+                const matchesExact = (target?: string) =>
+                  target
+                    ? pathname === target || pathname === `${target}/`
+                    : false;
+                const active = it.slug
+                  ? matchesPrefix(localizedPath) || matchesPrefix(path)
+                  : matchesExact(localizedPath) || matchesExact(path);
                 const Icon = it.icon;
 
                 return (
                   <Link
                     key={it.key}
                     href={href as any}
-                    className={`group flex items-center gap-3 rounded-md px-3 py-2 text-sm ${
+                    className={`group flex items-center gap-3 rounded-md px-3 py-2 text-sm transition ${
                       active
-                        ? "bg-accent text-accent-foreground"
-                        : "hover:bg-muted"
+                        ? "border border-orange-200 bg-orange-50 text-orange-700 shadow-sm"
+                        : "text-neutral-700 hover:bg-muted"
                     }`}
                     title={collapsed ? it.label : undefined}
                     aria-current={active ? "page" : undefined}
                   >
-                    <Icon className="size-4 opacity-80 group-hover:opacity-100" />
-                    {!collapsed && <span className="truncate">{it.label}</span>}
+                    <Icon
+                      className={`size-4 opacity-80 group-hover:opacity-100 ${
+                        active ? "text-orange-600" : "text-neutral-600"
+                      }`}
+                    />
+                    {!collapsed && (
+                      <span
+                        className={`truncate ${
+                          active ? "font-semibold text-orange-800" : ""
+                        }`}
+                      >
+                        {it.label}
+                      </span>
+                    )}
                   </Link>
                 );
               })}

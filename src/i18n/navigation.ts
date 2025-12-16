@@ -11,6 +11,10 @@ export const pathnames = {
     vi: "/admin/thuc-don",
     en: "/admin/landing-menu",
   },
+  "/admin/marquee-slides": {
+    vi: "/admin/marquee-slides",
+    en: "/admin/marquee-slides",
+  },
 } as const;
 
 export const { Link, useRouter, usePathname, redirect, getPathname } =
