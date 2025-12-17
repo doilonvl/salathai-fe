@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import createMiddleware from "next-intl/middleware";
 import { NextResponse, type NextRequest } from "next/server";
 import { locales, defaultLocale } from "@/i18n/request";
@@ -12,7 +13,7 @@ const intl = createMiddleware({
   localeDetection: false,
 });
 
-export function middleware(req: NextRequest) {
+export async function middleware(req: NextRequest) {
   const res = intl(req);
   if (!req.cookies.get("NEXT_LOCALE")) {
     res.cookies.set("NEXT_LOCALE", defaultLocale, {
@@ -25,8 +26,79 @@ export function middleware(req: NextRequest) {
   const match = pathname.match(/^\/(?:(vi|en)\/)?admin(\/|$)/);
   if (match) {
     const locale = (match[1] as "vi" | "en") ?? defaultLocale;
-    const token = req.cookies.get("access_token")?.value;
-    if (!token) {
+    const accessToken =
+      req.cookies.get("access_token")?.value ||
+      req.cookies.get("access_token_public")?.value;
+    const refreshToken =
+      req.cookies.get("refresh_token")?.value ||
+      req.cookies.get("refresh_token_public")?.value;
+
+    // Try to refresh on the server if access is missing but refresh is present
+    if (!accessToken && refreshToken) {
+      try {
+        const refreshRes = await fetch(
+          `${req.nextUrl.origin}/api/auth/refresh`,
+          {
+            method: "POST",
+            // Forward all cookies so BE can validate refresh in any format.
+            headers: {
+              cookie: req.headers.get("cookie") ?? "",
+            },
+          }
+        );
+
+        if (refreshRes.ok) {
+          const data = await refreshRes.json().catch(() => null);
+          const newAccess =
+            (data as any)?.accessToken ||
+            (data as any)?.access_token ||
+            (data as any)?.token;
+          const newRefresh =
+            (data as any)?.refreshToken ||
+            (data as any)?.refresh_token ||
+            (data as any)?.refresh ||
+            refreshToken;
+
+          if (newAccess) {
+            const isProd = process.env.NODE_ENV === "production";
+            res.cookies.set("access_token", newAccess, {
+              httpOnly: true,
+              secure: isProd,
+              sameSite: "lax",
+              path: "/",
+              maxAge: 60 * 15,
+            });
+            res.cookies.set("access_token_public", newAccess, {
+              httpOnly: false,
+              secure: isProd,
+              sameSite: "lax",
+              path: "/",
+              maxAge: 60 * 15,
+            });
+            res.cookies.set("refresh_token", newRefresh, {
+              httpOnly: true,
+              secure: isProd,
+              sameSite: "lax",
+              path: "/",
+              maxAge: 60 * 60 * 24 * 30,
+            });
+            res.cookies.set("refresh_token_public", newRefresh, {
+              httpOnly: false,
+              secure: isProd,
+              sameSite: "lax",
+              path: "/",
+              maxAge: 60 * 60 * 24 * 30,
+            });
+            return res;
+          }
+        }
+      } catch (err) {
+        // swallow and redirect to login below
+      }
+    }
+
+    // Redirect only when neither access nor refresh is available or refresh failed
+    if (!accessToken && !refreshToken) {
       const url = req.nextUrl.clone();
       const loginPath =
         locale === defaultLocale ? "/login" : `/${locale}/login`;
